@@ -17,11 +17,25 @@
     <!-- Inputs Block -->
     <div class="block">
       <div class="input-wrapper">
-        <input id="income1" class="input" type="text" placeholder="Перший дохід" />
+        <input
+          id="income1"
+          class="input"
+          type="text"
+          placeholder="Перший дохід"
+          inputmode="decimal"
+          pattern="[0-9]*"
+        />
         <span class="input-suffix">грн.</span>
       </div>
       <div class="input-wrapper">
-        <input id="income2" class="input" type="text" placeholder="Другий дохід" />
+        <input
+          id="income2"
+          class="input"
+          type="text"
+          placeholder="Другий дохід"
+          inputmode="decimal"
+          pattern="[0-9]*"
+        />
         <span class="input-suffix">грн.</span>
       </div>
       <button id="calculateBtn" class="button">Порахувати</button>
