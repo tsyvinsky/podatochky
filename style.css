@@ -1,0 +1,328 @@
+/* === Base === */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 24px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #f0f0f0;
+  color: #030712;
+}
+
+.container {
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* === Блоки === */
+.block {
+  background-color: #ffffff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  box-shadow: 0 10px 30px rgba(0, 14, 31, 0.2);
+}
+
+/* === Заголовок === */
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 100%;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+/* === Inputs & Button === */
+.input-wrapper {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 56px 14px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 120%;
+  letter-spacing: -0.015em;
+  border: 1px solid #BFC3C7;
+  border-radius: 999px;
+  outline: none;
+  background-color: #ffffff;
+  color: #030712;
+}
+
+.input::placeholder {
+  font-weight: normal;
+  color: #666E79;
+}
+
+.input-suffix {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 120%;
+  letter-spacing: -0.015em;
+  color: #666E79;
+  pointer-events: none;
+}
+
+.button {
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 120%;
+  letter-spacing: -0.015em;
+  text-align: center;
+  color: white;
+  background-color: #0080FF;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 3px 15px rgba(0, 128, 255, 0.15);
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+
+@media (hover: hover) {
+  .button:hover {
+    background-color: #030712;
+    box-shadow: none;
+  }
+}
+
+/* === Результаты === */
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.results.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.line.brutto {
+  padding-right: 25px;
+}
+
+.line.clickable {
+  cursor: pointer;
+  padding: 0;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 120%;
+  letter-spacing: -0.015em;
+  color: #666E79;
+}
+
+.value {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 120%;
+  letter-spacing: -0.015em;
+  color: #030712;
+}
+
+.value.with-arrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#arrow {
+  width: 19px;
+  height: 19px;
+  stroke: #0080FF;
+  stroke-width: 1.5;
+  transition: transform 0.3s ease;
+}
+
+#arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* === Divider === */
+.divider {
+  height: 1px;
+  background-color: #BFC3C7;
+  margin: 12px 0;
+}
+
+/* === Разворачиваемые налоги === */
+.tax-details {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+  will-change: max-height;
+}
+
+.tax-details.open {
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tax-item {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 22px;
+  padding-right: 25px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 120%;
+  letter-spacing: -0.015em;
+  color: #666E79;
+}
+
+.tax-item span:last-child {
+  font-size: 18px;
+  font-weight: bold;
+  color: #030712;
+}
+
+/* === Netto Final === */
+.netto-summary {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.netto-title {
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 120%;
+  letter-spacing: -0.015em;
+  color: #666E79;
+}
+
+.netto-value {
+  font-size: 64px;
+  font-weight: bold;
+  line-height: 100%;
+  letter-spacing: -0.015em;
+  color: #0080FF;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.netto-value small {
+  font-size: 18px;
+  font-weight: bold;
+  color: #0080FF;
+}
+
+/* === Hidden === */
+.hidden {
+  display: none;
+}
+
+/* === Mobile === */
+@media (max-width: 480px) {
+  .container {
+    padding: 16px;
+  }
+  .block {
+    padding: 24px 16px;
+  }
+  .title {
+    font-size: 24px;
+  }
+  .input {
+    font-size: 16px;
+  }
+  .input-suffix {
+    font-size: 14px;
+  }
+  .button {
+    font-size: 16px;
+  }
+  .value {
+    font-size: 16px;
+  }
+  .tax-item {
+    font-size: 14px;
+  }
+  .tax-item span:last-child {
+    font-size: 16px;
+  }
+  .netto-value {
+    font-size: 48px;
+  }
+  .netto-value small {
+    font-size: 14px;
+  }
+}
+
+/* === Тёмная тема === */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #f9f9f9;
+  }
+
+  .block {
+    background-color: #1e1e1e;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .input {
+    background-color: #2a2a2a;
+    border-color: #444;
+    color: #f9f9f9;
+  }
+
+  .input::placeholder,
+  .input-suffix,
+  .left,
+  .netto-title,
+  .tax-item {
+    color: #a0a0a0;
+  }
+
+  .value,
+  .tax-item span:last-child {
+    color: #ffffff;
+  }
+
+  .button {
+    background-color: #0080FF;
+    color: white;
+  }
+
+  .button:hover {
+    background-color: #ffffff;
+    color: #030712;
+  }
+
+  .divider {
+    background-color: #333;
+  }
+}

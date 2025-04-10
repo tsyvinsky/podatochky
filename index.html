@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Калькулятор податків</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header Block -->
+    <div class="block">
+      <h1 class="title">Порахуємо, скільки цього місяця ти винен державі😉</h1>
+    </div>
+
+    <!-- Inputs Block -->
+    <div class="block">
+      <div class="input-wrapper">
+        <input id="income1" class="input" type="text" placeholder="Перший дохід" />
+        <span class="input-suffix">грн.</span>
+      </div>
+      <div class="input-wrapper">
+        <input id="income2" class="input" type="text" placeholder="Другий дохід" />
+        <span class="input-suffix">грн.</span>
+      </div>
+      <button id="calculateBtn" class="button">Порахувати</button>
+    </div>
+
+    <!-- Results Block -->
+    <div id="results" class="block hidden results">
+
+      <!-- 💰 Брутто -->
+      <div class="line brutto">
+        <div class="left">
+          <span class="emoji">💰</span>
+          <span class="label">ЗП брутто</span>
+        </div>
+        <div class="value" id="bruttoAmount">0.00 грн.</div>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider"></div>
+
+      <!-- 🔫 Податки -->
+      <div class="line clickable" onclick="toggleTaxes()">
+        <div class="left">
+          <span class="emoji">🔫</span>
+          <span class="label">Податки</span>
+        </div>
+        <div class="value with-arrow">
+          <span id="taxTotal">0.00 грн.</span>
+          <svg id="arrow" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9L12 15L18 9" stroke="#0080FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Tax Details -->
+      <div id="taxDetails" class="tax-details">
+        <div class="tax-item">
+          <span>Єдиний податок (5%)</span>
+          <span id="singleTax">0.00 грн.</span>
+        </div>
+        <div class="tax-item">
+          <span>Військовий збір (1%)</span>
+          <span id="military">0.00 грн.</span>
+        </div>
+        <div class="tax-item">
+          <span>ЄСВ (фіксований)</span>
+          <span id="esv">0.00 грн.</span>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider"></div>
+
+      <!-- Netto Total -->
+      <div class="netto-summary">
+        <div class="netto-title">Загальна сума після виплати податків</div>
+        <div class="netto-value" onclick="copyNetto()">
+          <span id="nettoAmount">0.00</span><small> грн.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Автоматическая тема на основе системной -->
+  <script>
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.body.classList.add('dark');
+    }
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
