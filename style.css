@@ -86,7 +86,6 @@ body {
   border: none;
   border-radius: 999px;
   cursor: pointer;
-  box-shadow: 0 3px 15px rgba(0, 128, 255, 0.15);
   transition: background-color 150ms ease, box-shadow 150ms ease;
 }
 
