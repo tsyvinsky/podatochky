@@ -22,7 +22,7 @@ function calculate() {
 
   const tax5 = total * 0.05;
   const tax1 = total * 0.01;
-  const esv = 1760;
+  const esv = 1902.34;
   const taxTotal = tax5 + tax1 + esv;
   const netto = total - taxTotal;
 
