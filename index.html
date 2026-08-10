@@ -1,194 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Калькулятор податків</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Демо-калькулятор платежів ФОП в Україні та OSVČ у Чехії">
+  <title>Калькулятор податків — UA / CZ demo</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <main class="container">
+    <section class="block topbar">
+      <label class="country-label" for="countrySelect">Країна</label>
+      <div class="select-wrap">
+        <select id="countrySelect" class="country-select" aria-label="Оберіть країну">
+          <option value="ua">🇺🇦 UA</option>
+          <option value="cz">🇨🇿 CZ</option>
+        </select>
+      </div>
+    </section>
 
-  <div class="container">
+    <section class="block">
+      <p class="eyebrow" id="eyebrow">Податки · Україна</p>
+      <h1 class="title" id="title">Порахуємо, скільки цього місяця ти винен державі😉</h1>
+      <p class="subtitle hidden" id="subtitle"></p>
+    </section>
 
-    <!-- Header Block -->
-    <div class="block">
-      <h1 class="title">
-        Порахуємо, скільки цього місяця ти винен державі 😉
-      </h1>
-    </div>
-
-    <!-- Inputs Block -->
-    <div class="block">
-
-      <div id="incomeList" class="income-list">
-
-        <!-- Первый доход — удалить нельзя -->
-        <div class="input-wrapper">
-          <input
-            class="input income-input"
-            type="text"
-            placeholder="Дохід"
-            inputmode="decimal"
-          />
-          <span class="input-suffix">грн.</span>
+    <section id="uaPanel" class="mode-panel">
+      <div class="block">
+        <div id="uaIncomeList" class="income-list">
+          <div class="input-wrapper">
+            <input class="input income-input" type="text" placeholder="Дохід" inputmode="decimal">
+            <span class="input-suffix">грн.</span>
+          </div>
         </div>
-
+        <button id="addUaIncome" class="text-button" type="button" aria-label="Додати дохід">
+          <span aria-hidden="true">＋</span> Додати дохід
+        </button>
+        <button id="calculateUa" class="button" type="button">Порахувати</button>
       </div>
 
-      <!-- Добавить доход -->
-      <button
-        id="addIncomeBtn"
-        class="add-income-button"
-        type="button"
-      >
-        <svg
-          viewBox="0 0 20 20"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M10 4V16M4 10H16"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-        </svg>
+      <div id="uaResults" class="block results hidden" aria-live="polite">
+        <div class="line"><span class="muted">💰 ЗП брутто</span><strong id="uaGross">0,00 грн.</strong></div>
+        <div class="divider"></div>
+        <button class="line disclosure" type="button" data-details="uaTaxDetails" aria-expanded="false">
+          <span class="muted">🔫 Податки</span><span class="value-with-chevron"><strong id="uaTaxTotal">0,00 грн.</strong><span class="chevron" aria-hidden="true"></span></span>
+        </button>
+        <div id="uaTaxDetails" class="details hidden">
+          <div class="detail-line"><span>Єдиний податок (5%)</span><strong id="uaSingleTax">0,00 грн.</strong></div>
+          <div class="detail-line"><span>Військовий збір (1%)</span><strong id="uaMilitary">0,00 грн.</strong></div>
+          <div class="detail-line"><span>ЄСВ (фіксований)</span><strong id="uaEsv">0,00 грн.</strong></div>
+        </div>
+        <div class="divider"></div>
+        <div class="netto-summary">
+          <div class="muted small">Загальна сума після виплати податків</div>
+          <button id="copyUaNet" class="big-total" type="button"><span id="uaNet">0,00</span><small>грн.</small></button>
+        </div>
+      </div>
+    </section>
 
-        Додати дохід
-      </button>
-
-      <!-- Посчитать -->
-      <button
-        id="calculateBtn"
-        class="button"
-        type="button"
-      >
-        Порахувати
-      </button>
-
-    </div>
-
-    <!-- Results Block -->
-    <div
-      id="results"
-      class="block hidden results"
-    >
-
-      <!-- 💰 Брутто -->
-      <div class="line brutto">
-
-        <div class="left">
-          <span class="emoji">💰</span>
-          <span class="label">ЗП брутто</span>
+    <section id="czPanel" class="mode-panel hidden">
+      <div class="block">
+        <div class="tabs" role="tablist" aria-label="Спосіб обліку витрат">
+          <button class="tab active" type="button" role="tab" aria-selected="true" data-expense-mode="pausal">60 % паушал</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-expense-mode="actual">Фактичні витрати</button>
         </div>
 
-        <div
-          class="value"
-          id="bruttoAmount"
-        >
-          0.00 грн.
+        <div class="field-grid two-cols">
+          <label class="field"><span>Дохід за цей місяць</span><span class="input-wrapper"><input id="czIncome" class="input" type="text" inputmode="decimal" placeholder="0"><span id="czIncomeSuffix" class="input-suffix">Kč</span></span></label>
+          <label class="field"><span>Валюта</span><span class="select-wrap compact"><select id="currencySelect" class="control-select"><option value="CZK">CZK</option><option value="USD">USD</option></select></span></label>
         </div>
 
+        <div id="actualExpensesField" class="field expense-field hidden">
+          <span>Фактичні витрати за цей місяць</span>
+          <div id="czExpenseList" class="expense-list">
+            <div class="expense-row">
+              <input class="input expense-input no-suffix" type="text" inputmode="decimal" placeholder="0" aria-label="Сума витрати">
+              <span class="select-wrap expense-currency-wrap">
+                <select class="control-select expense-currency" aria-label="Валюта витрати">
+                  <option value="CZK">CZK</option>
+                  <option value="USD">USD</option>
+                </select>
+              </span>
+            </div>
+          </div>
+          <button id="addCzExpense" class="text-button expense-add" type="button"><span aria-hidden="true">＋</span> Додати витрату</button>
+        </div>
+
+        <div id="rateNote" class="rate-note rate-card">
+          <span><span id="rateStatusDot" class="status-dot"></span>Офіційний курс ČNB</span>
+          <strong><span id="usdRate">20.679</span> CZK / USD</strong>
+          <small id="rateDate">Завантажуємо актуальний курс…</small>
+        </div>
+
+        <button id="calculateCz" class="button" type="button">Порахувати рекомендацію</button>
       </div>
 
-      <!-- Divider -->
-      <div class="divider"></div>
-
-      <!-- 🔫 Податки -->
-      <div
-        class="line clickable"
-        onclick="toggleTaxes()"
-      >
-
-        <div class="left">
-          <span class="emoji">🔫</span>
-          <span class="label">Податки</span>
+      <div id="czResults" class="block results hidden" aria-live="polite">
+        <div class="line"><span class="muted">Дохід у CZK</span><strong id="czIncomeCzk">0 Kč</strong></div>
+        <div class="line"><span class="muted">Орієнтовний прибуток</span><strong id="czProfit">0 Kč</strong></div>
+        <div class="divider"></div>
+        <div class="recommendation">
+          <div><span class="result-icon">🩺</span><span><span class="muted small">Медичне / місяць</span><strong id="healthMonthly">0 Kč</strong></span></div>
+          <div><span class="result-icon">🛡️</span><span><span class="muted small">Соціальне / місяць</span><strong id="socialMonthly">0 Kč</strong></span></div>
+          <div><span class="result-icon">🏛️</span><span><span class="muted small">Податок / резерв</span><strong id="incomeTaxMonthly">0 Kč</strong></span></div>
         </div>
-
-        <div class="value with-arrow">
-
-          <span id="taxTotal">
-            0.00 грн.
-          </span>
-
-          <svg
-            id="arrow"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M6 9L12 15L18 9"
-              stroke="#0080FF"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-
+        <div class="divider"></div>
+        <div class="netto-summary">
+          <div class="muted small">Рекомендовано відкладати щомісяця</div>
+          <button id="copyCzTotal" class="big-total" type="button"><span id="czMonthlyTotal">0</span><small>Kč</small></button>
+          <div id="czIncomeShare" class="income-share">це 0 % від доходу</div>
         </div>
-
+        <div class="estimate-box">
+          <div><span>Прогнозований річний дохід</span><strong id="czAnnualIncome">0 Kč</strong></div>
+          <div><span>Прогнозований річний прибуток</span><strong id="czAnnualProfit">0 Kč</strong></div>
+          <div><span>Орієнтовний податок за рік</span><strong id="czAnnualTax">0 Kč</strong></div>
+        </div>
+        <button class="assumptions-toggle" type="button" data-details="czAssumptions" aria-expanded="false"><span>Формули та припущення</span><span class="chevron" aria-hidden="true"></span></button>
+        <div id="czAssumptions" class="details assumptions hidden">
+          <p><strong>Медичне:</strong> 13,5 % × 50 % річного прибутку, але не менше 3 306 Kč на місяць.</p>
+          <p><strong>Соціальне:</strong> 29,2 % × 55 % річного прибутку, але не менше 5 720 Kč на місяць.</p>
+          <p><strong>Податок на дохід:</strong> 15 % до річної бази 1 762 812 Kč і 23 % із частини понад цей поріг, мінус базова річна знижка платника 30 840 Kč. Інші знижки та відрахування не враховуються.</p>
+          <p>Калькулятор припускає, що такий дохід і витрати повторюватимуться всі 12 місяців. Розрахунок — для основної діяльності OSVČ у 2026 році, поза режимом paušální daň, без добровільного страхування на випадок хвороби.</p>
+          <p>Для 60% паушалу річні витрати обмежені сумою 1 200 000 Kč. Податкову частину краще щомісяця відкладати, але фактичні аванси Finančnímu úřadu сплачуються за графіком, що залежить від останнього відомого податку, а не щомісяця.</p>
+        </div>
       </div>
+    </section>
+  </main>
 
-      <!-- Tax Details -->
-      <div
-        id="taxDetails"
-        class="tax-details"
-      >
-
-        <div class="tax-item">
-          <span>Єдиний податок (5%)</span>
-          <span id="singleTax">0.00 грн.</span>
-        </div>
-
-        <div class="tax-item">
-          <span>Військовий збір (1%)</span>
-          <span id="military">0.00 грн.</span>
-        </div>
-
-        <div class="tax-item">
-          <span>ЄСВ (фіксований)</span>
-          <span id="esv">0.00 грн.</span>
-        </div>
-
-      </div>
-
-      <!-- Divider -->
-      <div class="divider"></div>
-
-      <!-- Netto Total -->
-      <div class="netto-summary">
-
-        <div class="netto-title">
-          Загальна сума після виплати податків
-        </div>
-
-        <div
-          class="netto-value"
-          onclick="copyNetto()"
-        >
-          <span id="nettoAmount">0.00</span>
-          <small>грн.</small>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- Copy Toast -->
-  <div
-    id="copyToast"
-    class="copy-toast"
-    role="status"
-    aria-live="polite"
-  >
-    Загальну суму скопійовано
-  </div>
-
+  <div id="copyToast" class="copy-toast" role="status">Суму скопійовано</div>
   <script src="script.js"></script>
-
 </body>
 </html>
