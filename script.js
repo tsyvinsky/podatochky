@@ -5,19 +5,22 @@ const copyToast = document.getElementById('copyToast');
 
 let toastTimer;
 
-// обработка ввода: только цифры, запятая, точка
+// === Ввод ===
+
+// оставляем только цифры, точку и запятую
 function filterInput(event) {
   event.target.value = event.target.value.replace(/[^0-9.,]/g, '');
 }
 
-// подключаем фильтр ко всем текущим и будущим инпутам
+// работает для первого и всех динамически добавленных инпутов
 incomeList.addEventListener('input', function (event) {
   if (event.target.classList.contains('income-input')) {
     filterInput(event);
   }
 });
 
-// формат чисел
+// === Форматирование ===
+
 function format(num) {
   return num.toLocaleString('uk-UA', {
     minimumFractionDigits: 2,
@@ -25,36 +28,72 @@ function format(num) {
   }).replace(/\s/g, ' ');
 }
 
-// превращаем содержимое инпута в число
 function parseIncome(value) {
   return parseFloat(value.replace(',', '.')) || 0;
 }
 
-// добавить новый доход
-function addIncome() {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'input-wrapper';
+// === Добавление дохода ===
 
-  wrapper.innerHTML = `
-    <input
-      class="input income-input"
-      type="text"
-      placeholder="Дохід"
-      inputmode="decimal"
-      pattern="[0-9]*"
-    />
-    <span class="input-suffix">грн.</span>
+function addIncome() {
+  const row = document.createElement('div');
+  row.className = 'income-row';
+
+  row.innerHTML = `
+    <div class="input-wrapper">
+      <input
+        class="input income-input"
+        type="text"
+        placeholder="Дохід"
+        inputmode="decimal"
+      />
+
+      <span class="input-suffix">грн.</span>
+    </div>
+
+    <button
+      class="remove-income"
+      type="button"
+      aria-label="Видалити дохід"
+    >
+      <svg
+        viewBox="0 0 20 20"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M5 5L15 15M15 5L5 15"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
   `;
 
-  incomeList.appendChild(wrapper);
+  incomeList.appendChild(row);
 
-  const newInput = wrapper.querySelector('.income-input');
-  newInput.focus();
+  // сразу ставим курсор в новый инпут
+  row.querySelector('.income-input').focus();
 }
 
 addIncomeBtn.addEventListener('click', addIncome);
 
-// функция расчёта
+// === Удаление дополнительного дохода ===
+
+incomeList.addEventListener('click', function (event) {
+  const removeButton = event.target.closest('.remove-income');
+
+  if (!removeButton) return;
+
+  const row = removeButton.closest('.income-row');
+
+  if (row) {
+    row.remove();
+  }
+});
+
+// === Расчёт ===
+
 function calculate() {
   const incomeInputs = document.querySelectorAll('.income-input');
 
@@ -64,7 +103,9 @@ function calculate() {
 
   const tax5 = total * 0.05;
   const tax1 = total * 0.01;
+
   const esv = 1902.34;
+
   const taxTotal = tax5 + tax1 + esv;
   const netto = total - taxTotal;
 
@@ -86,6 +127,7 @@ function calculate() {
   document.getElementById('nettoAmount').textContent =
     format(netto);
 
+  // плавное появление результатов
   const results = document.getElementById('results');
 
   results.classList.remove('hidden');
@@ -97,7 +139,17 @@ function calculate() {
 
 calculateBtn.addEventListener('click', calculate);
 
-// toast после копирования
+// === Enter = Порахувати ===
+
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    calculate();
+  }
+});
+
+// === Toast ===
+
 function showCopyToast() {
   clearTimeout(toastTimer);
 
@@ -108,17 +160,18 @@ function showCopyToast() {
   }, 1800);
 }
 
-// копирование нетто
-async function copyNetto() {
-  const displayed = document.getElementById('nettoAmount').textContent;
+// === Копирование нетто ===
 
-  // убираем разделители тысяч
-  // запятую сохраняем только как десятичный разделитель
+async function copyNetto() {
+  const displayed =
+    document.getElementById('nettoAmount').textContent;
+
   let clean = displayed
-    .replace(/[\s  ]/g, '')
+    .replace(/\s/g, '')
     .replace('.', ',');
 
-  // если копеек нет — копируем только целую сумму
+  // если копеек нет:
+  // 50 000,00 → 50000
   if (clean.endsWith(',00')) {
     clean = clean.slice(0, -3);
   }
@@ -131,7 +184,8 @@ async function copyNetto() {
   }
 }
 
-// разворачивание / сворачивание налогов
+// === Податки ===
+
 function toggleTaxes() {
   const taxDetails = document.getElementById('taxDetails');
   const arrow = document.getElementById('arrow');
@@ -139,23 +193,29 @@ function toggleTaxes() {
   const isOpen = taxDetails.classList.contains('open');
 
   if (isOpen) {
+    // фиксируем фактическую высоту
     taxDetails.style.maxHeight =
       taxDetails.scrollHeight + 'px';
 
+    // схлопываем на следующем кадре
     requestAnimationFrame(() => {
       taxDetails.style.maxHeight = '0';
     });
 
+    // после завершения анимации очищаем состояние
     setTimeout(() => {
       taxDetails.classList.remove('open');
       taxDetails.style.maxHeight = '';
     }, 300);
+
   } else {
     taxDetails.classList.add('open');
 
     taxDetails.style.maxHeight =
       taxDetails.scrollHeight + 'px';
 
+    // после открытия убираем жёсткую высоту,
+    // чтобы блок нормально реагировал на resize
     setTimeout(() => {
       taxDetails.style.maxHeight = '';
     }, 300);
@@ -163,11 +223,3 @@ function toggleTaxes() {
 
   arrow.classList.toggle('rotated');
 }
-
-// Enter = посчитать
-document.addEventListener('keydown', function (event) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    calculate();
-  }
-});
