@@ -279,6 +279,103 @@ body {
   }
 }
 
+/* === Dynamic incomes === */
+
+.income-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.income-list .input-wrapper {
+  margin-bottom: 0;
+}
+
+.add-income-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  width: 100%;
+  margin: 12px 0;
+  padding: 4px 0;
+
+  border: 0;
+  background: transparent;
+  color: #0080FF;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 120%;
+  letter-spacing: -0.015em;
+
+  cursor: pointer;
+}
+
+.add-income-button svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+@media (hover: hover) {
+  .add-income-button {
+    transition: opacity 150ms ease;
+  }
+
+  .add-income-button:hover {
+    opacity: 0.65;
+  }
+}
+
+/* === Copy toast === */
+
+.copy-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 1000;
+
+  transform: translate(-50%, 16px);
+
+  padding: 10px 16px;
+  border: 1px solid #0080FF;
+  border-radius: 999px;
+
+  background: rgba(0, 128, 255, 0.6);
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 120%;
+  letter-spacing: -0.015em;
+
+  white-space: nowrap;
+  pointer-events: none;
+
+  opacity: 0;
+
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.copy-toast.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (max-width: 480px) {
+  .copy-toast {
+    bottom: 16px;
+    max-width: calc(100vw - 32px);
+    white-space: normal;
+    text-align: center;
+  }
+}
+
 /* === Тёмная тема === */
 @media (prefers-color-scheme: dark) {
   body {
