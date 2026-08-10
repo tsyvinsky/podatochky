@@ -6,7 +6,10 @@
   <title>Калькулятор податків</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<div id="copyToast" class="copy-toast">
+  Загальну суму скопійовано
+</div>
+  <body>
   <div class="container">
 
     <!-- Header Block -->
@@ -14,32 +17,35 @@
       <h1 class="title">Порахуємо, скільки цього місяця ти винен державі😉</h1>
     </div>
 
-    <!-- Inputs Block -->
-    <div class="block">
-      <div class="input-wrapper">
-        <input
-          id="income1"
-          class="input"
-          type="text"
-          placeholder="Перший дохід"
-          inputmode="decimal"
-          pattern="[0-9]*"
-        />
-        <span class="input-suffix">грн.</span>
-      </div>
-      <div class="input-wrapper">
-        <input
-          id="income2"
-          class="input"
-          type="text"
-          placeholder="Другий дохід"
-          inputmode="decimal"
-          pattern="[0-9]*"
-        />
-        <span class="input-suffix">грн.</span>
-      </div>
-      <button id="calculateBtn" class="button">Порахувати</button>
+<!-- Inputs Block -->
+<div class="block">
+  <div id="incomeList" class="income-list">
+    <div class="input-wrapper">
+      <input
+        class="input income-input"
+        type="text"
+        placeholder="Дохід"
+        inputmode="decimal"
+        pattern="[0-9]*"
+      />
+      <span class="input-suffix">грн.</span>
     </div>
+  </div>
+
+  <button id="addIncomeBtn" class="add-income-button" type="button">
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path
+        d="M10 4V16M4 10H16"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      />
+    </svg>
+    Додати дохід
+  </button>
+
+  <button id="calculateBtn" class="button">Порахувати</button>
+</div>
 
     <!-- Results Block -->
     <div id="results" class="block hidden results">
